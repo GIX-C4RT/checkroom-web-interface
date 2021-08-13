@@ -15,6 +15,7 @@ def index():
 @bp.route('/checkout')
 @login_required
 def checkout():
+    return "Checkout"
     db = get_db()
     items = db.execute(
         'SELECT * FROM item WHERE user_id = NULL'
@@ -26,6 +27,7 @@ def checkout():
 @bp.route('/checkin')
 @login_required
 def checkin():
+    return "Checkin"
     db = get_db()
     items = db.execute(
         'SELECT * FROM item WHERE user_id = ?'
