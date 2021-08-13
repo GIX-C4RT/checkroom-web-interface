@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS item;
+
+CREATE TABLE user (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL
+);
+
+CREATE TABLE item (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    description TEXT,
+    user_id INTEGER,
+    FOREIGN KEY (user_id) REFERENCES user (id)
+);
