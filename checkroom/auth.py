@@ -95,7 +95,7 @@ def admin_required(view):
     @functools.wraps(view)
     @login_required
     def wrapped_view(**kwargs):
-        if (g.user.admin != True):
+        if (g.user["admin"] != True):
             abort(403)
         return view(**kwargs)
 
