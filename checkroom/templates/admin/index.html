@@ -11,12 +11,14 @@
             <th>Item</th>
             <th>Description</th>
             <th>Borrower</th>
+            <th>Update</th>
         </tr>
     {% for item in items %}
         <tr>
             <td>{{ item["name"] }}</td>
             <td>{{ item["description"] }}</td>
-            <td>{{ item["borrower"] }}</td>
+            <td>{{ item["username"] }}</td>
+            <td><a class="action" href="{{ url_for('admin.update', id=item['id']) }}">Edit</a></td>
         </tr>
     {% endfor %}
     </table>

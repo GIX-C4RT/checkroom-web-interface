@@ -49,3 +49,49 @@ def create():
             db.commit()
             return redirect(url_for('admin.index'))
     return render_template('admin/create.html')
+
+def get_item(id):
+    item = get_db().execute(
+        'SELECT id, name, description FROM item WHERE id = ?',
+        (id,)
+    ).fetchone()
+
+    if item is None:
+        abort(404, f"Item id {id} doesn't exist.")
+    
+    return item
+
+@bp.route('/update/<int:id>', methods=('GET', 'POST'))
+def update(id):
+    item = get_item(id)
+
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+
+        error = None
+
+        if not name:
+            error = "Name is required."
+
+        if error is not None:
+            flash(error)
+        else:
+            db = get_db()
+            db.execute(
+                'UPDATE item SET name = ?, description = ?'
+                ' WHERE id = ?',
+                (name, description, id)
+            )
+            db.commit()
+            return redirect(url_for('admin.index'))
+
+    return render_template('admin/update.html', item=item)
+
+@bp.route('delete/<int:id>', methods=('POST',))
+def delete(id):
+    get_item(id)
+    db = get_db()
+    db.execute('DELETE FROM item WHERE id = ?', (id,))
+    db.commit()
+    return redirect(url_for('admin.index'))
