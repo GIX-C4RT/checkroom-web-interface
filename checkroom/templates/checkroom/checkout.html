@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Checkout{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Description</th>
+            <th>Checkout</th>
+        </tr>
+    {% for item in available_items %}
+        <tr>
+            <td>{{ item["name"] }}</td>
+            <td>{{ item["description"] }}</td>
+            <td>
+                <form action="{{ url_for('checkroom.checkout', id=item['id']) }}" method="post">
+                    <input type="submit" value="Checkout" onclick="return confirm('Are you sure?');">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

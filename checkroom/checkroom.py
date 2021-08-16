@@ -12,27 +12,66 @@ bp = Blueprint('checkroom', __name__)
 def index():
     return render_template('checkroom/index.html')
 
-@bp.route('/checkout')
+def get_items(borrower=None):
+    db = get_db()
+    if not borrower:
+        items = db.execute(
+            'SELECT id, name, description'
+            ' FROM item'
+            ' WHERE borrower IS NULL'
+        ).fetchall()
+    else:
+        items = db.execute(
+            'SELECT id, name, description'
+            ' FROM item'
+            ' WHERE borrower = ?',
+            (borrower,)
+        ).fetchall()
+
+    return items
+
+@bp.route('/checkout', methods=('GET', 'POST'))
 @login_required
 def checkout():
-    return "Checkout"
-    db = get_db()
-    items = db.execute(
-        'SELECT * FROM item WHERE user_id = NULL'
-        # 'ORDER BY id DESC'
-    )
-    return str(items)
-    return render_template('/checkroom/checkout')
+    if request.method == 'POST':
+        error = None
 
-@bp.route('/checkin')
+        id = request.args.get('id')
+        if id is None:
+            error = "id is required."
+
+        db = get_db()
+        current_borrower = db.execute(
+            'SELECT borrower'
+            ' FROM item'
+            ' WHERE id = ?',
+            (id,)
+        ).fetchone()
+        
+        if current_borrower['borrower'] is not None:
+            error = "That item is unavailable."
+
+        if error is not None:
+            flash(error)
+        
+        db.execute(
+            'UPDATE item'
+            ' SET borrower = ?'
+            ' WHERE id = ?',
+            (g.user['id'], id)
+        )
+        db.commit()
+
+    available_items = get_items()
+    print(available_items)
+    return render_template('/checkroom/checkout.html', available_items=available_items)
+
+@bp.route('/checkin', methods=('GET', 'POST'))
 @login_required
 def checkin():
-    return "Checkin"
-    db = get_db()
-    items = db.execute(
-        'SELECT * FROM item WHERE user_id = ?'
-        'ORDER BY id DESC',
-        (g.user_id,)
-    )
-    return str(items)
-    return render_template('/checkroom/checkin')
+    if request.method == 'POST':
+        pass
+
+    my_items = get_items(borrower=g.user["id"])
+    print(my_items)
+    return render_template('/checkroom/checkin.html', my_items=my_items)

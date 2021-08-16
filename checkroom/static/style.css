@@ -132,3 +132,17 @@ html {
     align-self: start;
     min-width: 10em;
   }
+
+  /* Table styling */
+
+  table, th, td {
+    border: 1px solid black;
+  }
+
+  table {
+    border-collapse: collapse
+  }
+
+  th {
+    text-align: left;
+  }
