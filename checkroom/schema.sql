@@ -10,7 +10,8 @@ CREATE TABLE user (
 
 CREATE TABLE item (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
     description TEXT,
-    user_id INTEGER,
-    FOREIGN KEY (user_id) REFERENCES user (id)
+    borrower INTEGER,
+    FOREIGN KEY (borrower) REFERENCES user (id)
 );

@@ -1,9 +1,23 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Index{% endblock %}</h1>
+    <h1>{% block title %}Items{% endblock %}</h1>
+    <a class="action" href="{{ url_for('admin.create') }}">New Item</a>
 {% endblock %}
 
 {% block content %}
-    <p>Admin Stuff</p>
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Description</th>
+            <th>Borrower</th>
+        </tr>
+    {% for item in items %}
+        <tr>
+            <td>{{ item["name"] }}</td>
+            <td>{{ item["description"] }}</td>
+            <td>{{ item["borrower"] }}</td>
+        </tr>
+    {% endfor %}
+    </table>
 {% endblock %}
