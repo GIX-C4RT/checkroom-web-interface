@@ -47,7 +47,7 @@ def checkout():
             ' WHERE id = ?',
             (id,)
         ).fetchone()
-        
+
         if current_borrower['borrower'] is not None:
             error = "That item is unavailable."
 
@@ -70,7 +70,33 @@ def checkout():
 @login_required
 def checkin():
     if request.method == 'POST':
-        pass
+        error = None
+
+        id = request.args.get('id')
+        if id is None:
+            error = "id is required."
+
+        db = get_db()
+        current_borrower = db.execute(
+            'SELECT borrower'
+            ' FROM item'
+            ' WHERE id = ?',
+            (id,)
+        ).fetchone()
+        
+        if current_borrower['borrower'] != g.user['id']:
+            error = "You cannot check in an item you have not checked out."
+
+        if error is not None:
+            flash(error)
+        
+        db.execute(
+            'UPDATE item'
+            ' SET borrower = NULL'
+            ' WHERE id = ?',
+            (id,)
+        )
+        db.commit()
 
     my_items = get_items(borrower=g.user["id"])
     print(my_items)
