@@ -20,7 +20,10 @@ def before_request():
 def index():
     db = get_db()
     items = db.execute(
-        'SELECT * FROM item'
+        'SELECT i.id, name, description, borrower, username'
+        ' FROM item i'
+        ' LEFT JOIN user u ON i.borrower = u.id'
+        ' ORDER BY name ASC'
     ).fetchall()
     return render_template('admin/index.html', items=items)
 
