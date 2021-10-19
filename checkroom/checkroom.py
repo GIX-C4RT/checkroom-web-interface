@@ -9,6 +9,7 @@ from checkroom.db import get_db
 bp = Blueprint('checkroom', __name__)
 
 @bp.route('/')
+@login_required
 def index():
     return render_template('checkroom/index.html')
 
