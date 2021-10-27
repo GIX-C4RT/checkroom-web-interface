@@ -11,13 +11,18 @@ In the current design the front end and back end are tightly coupled, with the b
 Flask app backend that renders a website frontend.
 
 ## Running
-1. Clone this repo
-2. Install the dependencies (possibly in a virtual environment)
-3. Initialize the database (flask init-db)
-4. Run the appropriate run script for your shell (run.bash,bat,ps1)
+### Ubuntu
+```
+sudo apt install python3 # install Python 3
+pip install flask # install flask
+git clone https://github.com/GIX-C4RT/checkroom-web-interface.git # clone the repo
+cd checkroom-web-interface # navigate to the new repo folder
+flask init-db # initialize the database
+source run.bash # run the web app backend
+```
 
 ## Dependencies
-* Python 3.9
+* Python 3
 * Flask
 
 ## Running
