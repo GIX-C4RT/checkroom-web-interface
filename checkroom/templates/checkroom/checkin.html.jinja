@@ -5,22 +5,12 @@
 {% endblock %}
 
 {% block content %}
-    <table>
-        <tr>
-            <th>Item</th>
-            <th>Description</th>
-            <th>Checkin</th>
-        </tr>
-    {% for item in my_items %}
-        <tr>
-            <td>{{ item["name"] }}</td>
-            <td>{{ item["description"] }}</td>
-            <td>
-                <form action="{{ url_for('checkroom.checkin', id=item['id']) }}" method="post">
-                    <input type="submit" value="Checkin" onclick="return confirm('Are you sure?');">
-                </form>
-            </td>
-        </tr>
-    {% endfor %}
-    </table>
+    {% if True %} {# change to if items#}
+    <form action="{{ url_for('checkroom.checkin') }}" method="post">
+        {% include "checkroom/item_list.html.jinja" %}
+        <input type="submit" value="Checkin" onclick="return confirm('Are you sure?');">
+    </form>
+    {% else %}
+    <span>You have no outstanding items</span>
+    {% endif %}
 {% endblock %}

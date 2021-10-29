@@ -121,4 +121,4 @@ def checkin():
 
     my_items = get_items(borrower=g.user["id"])
     # print(my_items)
-    return render_template('/checkroom/checkin.html.jinja', my_items=my_items)
+    return render_template('/checkroom/checkin.html.jinja', items=my_items)

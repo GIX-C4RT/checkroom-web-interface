@@ -1,0 +1,16 @@
+<table>
+    <tr>
+        <th>Item</th>
+        <th>Description</th>
+        <th>Select</th>
+    </tr>
+{% for item in items %}
+    <tr>
+        <td>{{ item["name"] }}</td>
+        <td>{{ item["description"] }}</td>
+        <td>
+            <input type="radio" name="id" value="{{ item["id"] }}">
+        </td>
+    </tr>
+    {% endfor %}
+</table>
