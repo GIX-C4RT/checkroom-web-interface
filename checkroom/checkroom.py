@@ -11,7 +11,7 @@ bp = Blueprint('checkroom', __name__)
 @bp.route('/')
 @login_required
 def index():
-    return render_template('checkroom/index.html')
+    return render_template('checkroom/index.html.jinja')
 
 def get_items(borrower=None):
     db = get_db()
@@ -75,7 +75,7 @@ def checkout():
 
     available_items = get_items()
     # print(available_items)
-    return render_template('/checkroom/checkout.html', available_items=available_items)
+    return render_template('/checkroom/checkout.html.jinja', available_items=available_items)
 
 @bp.route('/checkin', methods=('GET', 'POST'))
 @login_required
@@ -121,4 +121,4 @@ def checkin():
 
     my_items = get_items(borrower=g.user["id"])
     # print(my_items)
-    return render_template('/checkroom/checkin.html', my_items=my_items)
+    return render_template('/checkroom/checkin.html.jinja', my_items=my_items)

@@ -25,7 +25,7 @@ def index():
         ' LEFT JOIN user u ON i.borrower = u.id'
         ' ORDER BY name ASC'
     ).fetchall()
-    return render_template('admin/index.html', items=items)
+    return render_template('admin/index.html.jinja', items=items)
 
 @bp.route('/create', methods=('GET', 'POST'))
 def create():
@@ -48,7 +48,7 @@ def create():
             )
             db.commit()
             return redirect(url_for('admin.index'))
-    return render_template('admin/create.html')
+    return render_template('admin/create.html.jinja')
 
 def get_item(id):
     item = get_db().execute(
@@ -86,7 +86,7 @@ def update(id):
             db.commit()
             return redirect(url_for('admin.index'))
 
-    return render_template('admin/update.html', item=item)
+    return render_template('admin/update.html.jinja', item=item)
 
 @bp.route('delete/<int:id>', methods=('POST',))
 def delete(id):
