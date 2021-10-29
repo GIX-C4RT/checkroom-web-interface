@@ -63,8 +63,18 @@ def checkout():
         )
         db.commit()
 
+        # display confirmation message
+        item_name = db.execute(
+            'SELECT name'
+            ' FROM item'
+            ' WHERE id = ?',
+            (id,)
+        ).fetchone()
+        
+        flash("Successfully checked out " + item_name["name"])
+
     available_items = get_items()
-    print(available_items)
+    # print(available_items)
     return render_template('/checkroom/checkout.html', available_items=available_items)
 
 @bp.route('/checkin', methods=('GET', 'POST'))
@@ -73,7 +83,7 @@ def checkin():
     if request.method == 'POST':
         error = None
 
-        id = request.args.get('id')
+        id = request.form.get('id')
         if id is None:
             error = "id is required."
 
@@ -99,6 +109,16 @@ def checkin():
         )
         db.commit()
 
+        # display confirmation message
+        item_name = db.execute(
+            'SELECT name'
+            ' FROM item'
+            ' WHERE id = ?',
+            (id,)
+        ).fetchone()
+        # print(item_name["name"])
+        flash("Successfully checked in " + item_name["name"])
+
     my_items = get_items(borrower=g.user["id"])
-    print(my_items)
+    # print(my_items)
     return render_template('/checkroom/checkin.html', my_items=my_items)
