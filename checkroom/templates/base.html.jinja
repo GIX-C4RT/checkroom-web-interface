@@ -4,25 +4,42 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{% endblock %} - Checkroom</title>
-        {# <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"> #}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
-        <nav>
-            <h1><a href="{{ url_for('checkroom.index') }}">Checkroom</a></h1>
-            <ul>
-                {% if g.user %}
-                    <li><span>{{ g.user['username'] }}</span></li>
-                    <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
-                    {% if g.user.admin %}
-                        <li><a href="{{ url_for('admin.index') }}">Administration</a></li>
-                    {% endif %}
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="{{ url_for('checkroom.index') }}">Checkroom</a>
+            </div>
 
-                {% else %}
-                    <li><a href="{{ url_for('auth.register') }}">Register</a></li>
-                    <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
-                {% endif %}
-            </ul>
+            <div class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="{{ url_for('checkroom.index') }}">Home</a>
+                </div>
+                <div class="navbar-end">
+                    {% if g.user %}
+                        <div class="navbar-item">
+                            <span>{{ g.user['username'] }}</span>
+                        </div>
+                        <div class="navbar-item">
+                            <div class="buttons">
+                                <a class="button is-light" href="{{ url_for('auth.logout') }}">Log Out</a>
+                                {% if g.user.admin %}
+                                    <a class="button is-primary" href="{{ url_for('admin.index') }}">Administration</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="navbar-item">
+                            <div class="buttons">
+                                <a class="button is-primary" href="{{ url_for('auth.register') }}">Register</a>
+                                <a class="button is-light" href="{{ url_for('auth.login') }}">Log In</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </nav>
         <section class="content">
             <header>

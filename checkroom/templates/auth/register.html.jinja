@@ -3,17 +3,32 @@
 {% block title %}Register{% endblock %}
 
 {% block header %}
-    <h1>{% block title %}Register{% endblock %}</h1>
+    <h1 class="title">Register</h1>
 {% endblock %}
 
 {% block content %}
-    <form method="post">
-        <label for="username">Username</label>
-        <input name="username" id="username" required>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
-        <label for="admin">Admin (Y/N)</label>
-        <input type="checkbox" name="admin" id="admin">
-        <input type="submit" value="Register">
-    </form>
+    <form class="box" method="post">
+        <div class="field">
+            <label class="label" for="username">Username</label>
+            <div class="control">
+                <input class="input" type="text" name="username" id="username" required>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label" for="password">Password</label>
+            <div class="control">
+                <input class="input" type="password" name="password" id="password" required>
+            </div>
+        </div>
+        <div class="field">
+            <label class="checkbox" for="admin">Admin</label>
+            <div class="control">
+                <input type="checkbox" name="admin" id="admin">
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <input class="button is-primary" type="submit" value="Register">
+            </div>
+        </div>
 {% endblock %}
