@@ -1,7 +1,9 @@
 {% extends 'base.html.jinja' %}
 
+{% block title %}Index{% endblock %}
+
 {% block header %}
-    <h1>{% block title %}Index{% endblock %}</h1>
+    <h1>Index</h1>
     <a class="action" href="{{ url_for('checkroom.checkout') }}">Checkout</a>
     <a class="action" href="{{ url_for('checkroom.checkin') }}">Checkin</a>
 {% endblock %}
