@@ -34,11 +34,9 @@ def get_items(borrower=None):
 @bp.route('/checkout', methods=('GET', 'POST'))
 @login_required
 def checkout():
+    error = None
     if request.method == 'POST':
-        # error checking
-        error = None
-
-        id = request.args.get('id')
+        id = request.form.get('id')
         if id is None:
             error = "id is required."
         else:
@@ -73,15 +71,14 @@ def checkout():
     if error is not None:
         flash(error)
     available_items = get_items()
-    # print(available_items)
+    print(available_items)
     return render_template('/checkroom/checkout.html.jinja', available_items=available_items)
 
 @bp.route('/checkin', methods=('GET', 'POST'))
 @login_required
 def checkin():
+    error = None
     if request.method == 'POST':
-        error = None
-
         id = request.form.get('id')
         if id is None:
             error = "id is required."
@@ -117,5 +114,5 @@ def checkin():
     if error is not None:
         flash(error)
     my_items = get_items(borrower=g.user["id"])
-    # print(my_items)
-    return render_template('/checkroom/checkin.html.jinja', items=my_items)
+    print(my_items)
+    return render_template('/checkroom/checkin.html.jinja', my_items=my_items)

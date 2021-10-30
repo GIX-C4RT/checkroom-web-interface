@@ -1,26 +1,20 @@
 {% extends 'base.html.jinja' %}
 
+{% from 'checkroom/item_list.html.jinja' import list_items %}
+
 {% block header %}
     <h1>{% block title %}Checkout{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-    <table>
-        <tr>
-            <th>Item</th>
-            <th>Description</th>
-            <th>Checkout</th>
-        </tr>
-    {% for item in available_items %}
-        <tr>
-            <td>{{ item["name"] }}</td>
-            <td>{{ item["description"] }}</td>
-            <td>
-                <form action="{{ url_for('checkroom.checkout', id=item['id']) }}" method="post">
-                    <input type="submit" value="Checkout" onclick="return confirm('Are you sure?');">
-                </form>
-            </td>
-        </tr>
-    {% endfor %}
-    </table>
+    {% if available_items %}
+    <form action="{{ url_for('checkroom.checkout') }}" method="post">
+        {{ list_items(available_items) }}
+        <input type="submit" value="Checkout">
+    </form>
+    {% else %}
+    <span>There are no available items.</span>
+    {% endif %}
 {% endblock %}
+
+

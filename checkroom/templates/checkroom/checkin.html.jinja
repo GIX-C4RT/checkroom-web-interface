@@ -1,16 +1,18 @@
 {% extends 'base.html.jinja' %}
 
+{% from 'checkroom/item_list.html.jinja' import list_items %}
+
 {% block header %}
     <h1>{% block title %}Checkin{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-    {% if True %} {# change to if items#}
+    {% if my_items %}
     <form action="{{ url_for('checkroom.checkin') }}" method="post">
-        {% include "checkroom/item_list.html.jinja" %}
-        <input type="submit" value="Checkin" onclick="return confirm('Are you sure?');">
+        {{ list_items(my_items) }}
+        <input type="submit" value="Checkin">
     </form>
     {% else %}
-    <span>You have no outstanding items</span>
+    <span>You have no outstanding items.</span>
     {% endif %}
 {% endblock %}
