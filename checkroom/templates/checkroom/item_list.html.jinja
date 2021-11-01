@@ -1,17 +1,19 @@
-{% macro list_items(items) %}
-<table>
+{% macro list_items(items, buttons=True) %}
+<table class="table is-bordered">
     <tr>
         <th>Item</th>
         <th>Description</th>
-        <th>Select</th>
+        {# <th>Select</th> #}
     </tr>
 {% for item in items %}
     <tr>
         <td>{{ item["name"] }}</td>
         <td>{{ item["description"] }}</td>
+        {% if buttons %}
         <td>
             <input type="radio" name="id" value="{{ item['id'] }}" required>
         </td>
+        {% endif %}
     </tr>
     {% endfor %}
 </table>

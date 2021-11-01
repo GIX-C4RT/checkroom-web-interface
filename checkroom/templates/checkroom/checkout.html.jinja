@@ -10,7 +10,7 @@
     {% if available_items %}
     <form action="{{ url_for('checkroom.checkout') }}" method="post">
         {{ list_items(available_items) }}
-        <input type="submit" value="Checkout">
+        <input class="button is-success" type="submit" value="Check Out">
     </form>
     {% else %}
     <span>There are no available items.</span>

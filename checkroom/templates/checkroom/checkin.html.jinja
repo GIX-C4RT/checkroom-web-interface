@@ -10,7 +10,7 @@
     {% if my_items %}
     <form action="{{ url_for('checkroom.checkin') }}" method="post">
         {{ list_items(my_items) }}
-        <input type="submit" value="Checkin">
+        <input class="button is-success" type="submit" value="Check In">
     </form>
     {% else %}
     <span>You have no outstanding items.</span>
