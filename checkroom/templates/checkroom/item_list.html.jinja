@@ -10,7 +10,7 @@
         <td>{{ item["name"] }}</td>
         <td>{{ item["description"] }}</td>
         <td>
-            <input type="radio" name="id" value="{{ item["id"] }}">
+            <input type="radio" name="id" value="{{ item['id'] }}" required>
         </td>
     </tr>
     {% endfor %}
