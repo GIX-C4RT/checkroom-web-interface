@@ -1,0 +1,33 @@
+{% extends 'base.html.jinja' %}
+
+{% from 'checkroom/item_list.html.jinja' import list_items %}
+
+{% block title %}Home{% endblock %}
+
+{% block header %}
+    <h1>Index</h1>
+    <a class="action" href="{{ url_for('checkroom.checkout') }}">Checkout</a>
+    <a class="action" href="{{ url_for('checkroom.checkin') }}">Checkin</a>
+{% endblock %}
+
+{% block content %}
+    <div class="columns">
+        <div class="column">
+            <h1>Your Items</h1>
+            {% if my_items %}
+            {{ list_items(my_items, buttons=False) }}
+            {% else %}
+            <span>You have no outstanding items.</span>
+            {% endif %}
+        </div>
+
+        <div class="column">
+            <h1>Available Items</h1>
+            {% if available_items %}
+            {{ list_items(available_items, buttons=False) }}
+            {% else %}
+            <span>There are no available items.</span>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

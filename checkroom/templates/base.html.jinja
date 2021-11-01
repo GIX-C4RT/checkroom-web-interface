@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Base{% endblock %} - Checkroom</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+
+    <body>
+        <nav class="level m-1">
+            <div class="level-left">
+                <a class="level-item is-size-3" href="{{ url_for('checkroom.index') }}">Checkroom</a>
+                <a class="level-item" href="{{ url_for('checkroom.index') }}">Home</a>
+                {% if g.user %}
+                <a class="level-item" href="{{ url_for('checkroom.checkout') }}">Checkout</a>
+                <a class="level-item" href="{{ url_for('checkroom.checkin') }}">Checkin</a>
+                {% endif %}
+            </div>
+
+            <div class="level-right">
+                {% if g.user %}
+                <div class="level-item">
+                    <span class="is-size-5">{{ g.user['username'] }}</span>
+                </div>
+                <div class="level-item">
+                    <div class="buttons">
+                        <a class="button is-light" href="{{ url_for('auth.logout') }}">Log Out</a>
+                        {% if g.user.admin %}
+                        <a class="button is-primary" href="{{ url_for('admin.index') }}">Administration</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% else %}
+                <div class="level-item">
+                    <div class="buttons">
+                        <a class="button is-primary" href="{{ url_for('auth.register') }}">Register</a>
+                        <a class="button is-light" href="{{ url_for('auth.login') }}">Log In</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </nav>
+
+        <header class="level m-1">
+            <div class="level-left">
+                <h1 class="title is-5">
+                    {{ self.title() }}
+                </h1>
+            </div>
+        </header>
+
+        {% for message in get_flashed_messages() %}
+        <section class="section">
+        <div class="notification">{{ message }}</div>
+        </section>
+        {% endfor %}
+
+        <section class="section">
+        {% block content %}{% endblock %}
+        </section>
+    </body>
+</html>
