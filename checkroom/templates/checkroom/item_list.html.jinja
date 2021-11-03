@@ -1,12 +1,14 @@
 {% macro list_items(items, buttons=True) %}
 <table class="table is-bordered">
     <tr>
-        <th>Item</th>
+        <th>ArUco Marker</th>
+        <th>Name</th>
         <th>Description</th>
         {# <th>Select</th> #}
     </tr>
 {% for item in items %}
     <tr>
+        <td><img src="/aruco/{{ item["id"] }}"></td>
         <td>{{ item["name"] }}</td>
         <td>{{ item["description"] }}</td>
         {% if buttons %}

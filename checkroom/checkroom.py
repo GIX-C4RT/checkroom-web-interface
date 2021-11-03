@@ -1,7 +1,9 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, Response
 )
 from werkzeug.exceptions import abort
+import cv2
+import numpy as np
 
 from checkroom.auth import login_required
 from checkroom.db import get_db
@@ -119,3 +121,22 @@ def checkin():
     my_items = get_items(borrower=g.user["id"])
     # print(my_items)
     return render_template('/checkroom/checkin.html.jinja', my_items=my_items)
+
+@bp.route('/aruco/<id>', methods=('GET',))
+@login_required
+def aruco(id):
+    # return id
+    id = int(id)
+    aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_ARUCO_ORIGINAL)
+    tag = np.zeros((500, 500, 1), dtype="uint8")
+    cv2.aruco.drawMarker(aruco_dict, id, 500, tag, 1)
+    # cv2.imshow("tag", tag)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+    is_success, im_buf_arr = cv2.imencode(".png", tag)
+    byte_im = im_buf_arr.tobytes()
+    return Response(byte_im, mimetype="image/png")
+
+
+
+
