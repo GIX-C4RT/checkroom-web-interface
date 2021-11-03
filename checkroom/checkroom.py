@@ -125,7 +125,6 @@ def checkin():
 @bp.route('/aruco/<id>', methods=('GET',))
 @login_required
 def aruco(id):
-    # return id
     id = int(id)
     aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_ARUCO_ORIGINAL)
     tag = np.zeros((500, 500, 1), dtype="uint8")
@@ -137,6 +136,33 @@ def aruco(id):
     byte_im = im_buf_arr.tobytes()
     return Response(byte_im, mimetype="image/png")
 
+
+@bp.route('/image/<id>', methods=('GET',))
+@login_required
+def image(id):
+    # TODO: replace with request to database
+    id = int(id)
+    aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_ARUCO_ORIGINAL)
+    tag = np.zeros((500, 500, 1), dtype="uint8")
+    cv2.aruco.drawMarker(aruco_dict, id, 500, tag, 1)
+    # cv2.imshow("tag", tag)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+    is_success, im_buf_arr = cv2.imencode(".png", tag)
+    byte_im = im_buf_arr.tobytes()
+    return Response(byte_im, mimetype="image/png")
+    #
+    id = int(id)
+    db = get_db()
+    image = db.execute(
+        'SELECT image'
+        ' FROM item'
+        ' WHERE id = ?',
+        (id,)
+    ).fetchone()['image']
+    
+    byte_im = image.tobytes()
+    return Response(byte_im, mimetype="image/png")
 
 
 

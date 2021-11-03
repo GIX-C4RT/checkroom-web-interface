@@ -2,9 +2,7 @@
 
 {% from 'checkroom/item_list.html.jinja' import list_items %}
 
-{% block header %}
-    <h1>{% block title %}Checkin{% endblock %}</h1>
-{% endblock %}
+{% block title %}Checkin{% endblock %}
 
 {% block content %}
     {% if my_items %}

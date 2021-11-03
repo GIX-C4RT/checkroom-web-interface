@@ -2,17 +2,39 @@
 
 {% block title %}New Item{% endblock %}
 
-{% block header %}
-  <h1>{% block title %}New Item{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
-  <form method="post">
-    <label for="name">Name</label>
-    <input name="name" id="name" value="{{ request.form['name'] }}" required>
-    <label for="description">Description</label>
-    <textarea name="description" id="description">{{ request.form['description'] }}</textarea>
-    <input type="submit" value="Save">
-  </form>
+<form action="{{ url_for('admin.create') }} "method="post" enctype="multipart/form-data">
+  <div class="field">
+    <label class="label" for="name">Name</label>
+    <div class="control">
+      <input name="name" id="name" value="{{ request.form['name'] }}" class="input" type="text" placeholder="Item Name" required>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="description" class="label">Description</label>
+    <div class="control">
+      <textarea name="description" id="description" class="textarea" placeholder="Item Description">{{ request.form['description'] }}</textarea>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="image" class="label">Item Image</label>
+    <div class="control">
+      <input type="file" name="image" accept=".png" required>
+    </div>
+  </div>
+
+  <div class="field is-grouped">
+    <div class="control">
+      <input class="button is-success" type="submit" value="Save">
+    </div>
+    <div class="control">
+      <a href="{{ url_for('admin.index') }}" class="button is-warning">Cancel</a>
+    </div>
+  </div>
+</form>
+
+  
 {% endblock %}
 

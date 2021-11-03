@@ -3,6 +3,7 @@ from flask import (
     request, url_for
 )
 from werkzeug.exceptions import abort
+import cv2
 
 from checkroom.auth import admin_required
 from checkroom.db import get_db
@@ -32,19 +33,25 @@ def create():
     if request.method == 'POST':
         name = request.form['name']
         description = request.form['description']
+        image_file = request.files['image']
         
         error = None
 
         if not name:
             error = 'Name is required'
+        if not image_file:
+            error = 'Image is required'
         
         if error is not None:
             flash(error)
         else:
+            # serialize image for storage
+            image_serialized = image_file.read()
+            # print(image_serialized)
             db = get_db()
             db.execute(
-                'INSERT INTO item (name, description) VALUES (?, ?)',
-                (name, description)
+                'INSERT INTO item (name, description, image) VALUES (?, ?, ?)',
+                (name, description, image_serialized)
             )
             db.commit()
             return redirect(url_for('admin.index'))
@@ -68,20 +75,25 @@ def update(id):
     if request.method == 'POST':
         name = request.form['name']
         description = request.form['description']
+        image_file = request.files['image']
 
         error = None
 
         if not name:
             error = "Name is required."
+        if not image_file:
+            error = "Image is required."
 
         if error is not None:
             flash(error)
         else:
+            # serialize image for storage
+            image_serialized = image_file.read()
             db = get_db()
             db.execute(
-                'UPDATE item SET name = ?, description = ?'
+                'UPDATE item SET name = ?, description = ?, image = ?'
                 ' WHERE id = ?',
-                (name, description, id)
+                (name, description, image_serialized, id)
             )
             db.commit()
             return redirect(url_for('admin.index'))

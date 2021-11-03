@@ -1,27 +1,27 @@
 {% extends 'base.html.jinja' %}
 
-{% block title %}Administration{% endblock %}
-
-{% block header %}
-    <h1>{% block title %}Items{% endblock %}</h1>
-    <a class="action" href="{{ url_for('admin.create') }}">New Item</a>
-{% endblock %}
+<{% block title %}Administration{% endblock %}
 
 {% block content %}
-    <table>
-        <tr>
-            <th>Item</th>
-            <th>Description</th>
-            <th>Borrower</th>
-            <th>Update</th>
-        </tr>
+<a class="button" href="{{ url_for('admin.create') }}">New Item</a>
+<table class="table is-bordered">
+    <tr>
+        <th>Image</th>
+        <th>ArUco Marker</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Borrower</th>
+        <th>Update</th>
+    </tr>
     {% for item in items %}
-        <tr>
-            <td>{{ item["name"] }}</td>
-            <td>{{ item["description"] }}</td>
-            <td>{{ item["username"] }}</td>
-            <td><a class="action" href="{{ url_for('admin.update', id=item['id']) }}">Edit</a></td>
-        </tr>
+    <tr>
+        <td><figure class="image is-128x128"><img alt="Image of {{ item['name'] }}" src="/image/{{ item['id'] }}"></figure></td>
+        <td><figure class="image is-128x128"><img alt="ArUco marker for item id {{ item['id'] }}" src="/aruco/{{ item['id'] }}"></figure></td>
+        <td>{{ item["name"] }}</td>
+        <td>{{ item["description"] }}</td>
+        <td>{{ item["username"] }}</td>
+        <td><a class="button" href="{{ url_for('admin.update', id=item['id']) }}">Edit</a></td>
+    </tr>
     {% endfor %}
-    </table>
+</table>
 {% endblock %}
