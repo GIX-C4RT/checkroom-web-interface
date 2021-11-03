@@ -3,7 +3,7 @@
 {% block title %}Update "{{ item['name'] }}"{% endblock %}
 
 {% block content %}
-<form action="{{ url_for('admin.create') }} "method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
     <div class="field">
         <label class="label" for="name">Name</label>
         <div class="control">
@@ -21,7 +21,7 @@
     <div class="field">
         <label for="image" class="label">Item Image</label>
         <div class="control">
-            <input type="file" name="image" accept=".png" required>
+            <input type="file" name="image" accept=".png">
         </div>
     </div>
   

@@ -115,7 +115,7 @@ def checkin():
                     (id,)
                 ).fetchone()
                 # print(item_name["name"])
-                flash("Successfully checked in " + item_name["name"])
+                flash("Successfully checked in " + item_name["name"] + ". Please wait for the robot to retrieve your item.")
     if error is not None:
         flash(error)
     my_items = get_items(borrower=g.user["id"])
@@ -140,18 +140,6 @@ def aruco(id):
 @bp.route('/image/<id>', methods=('GET',))
 @login_required
 def image(id):
-    # TODO: replace with request to database
-    id = int(id)
-    aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_ARUCO_ORIGINAL)
-    tag = np.zeros((500, 500, 1), dtype="uint8")
-    cv2.aruco.drawMarker(aruco_dict, id, 500, tag, 1)
-    # cv2.imshow("tag", tag)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-    is_success, im_buf_arr = cv2.imencode(".png", tag)
-    byte_im = im_buf_arr.tobytes()
-    return Response(byte_im, mimetype="image/png")
-    #
     id = int(id)
     db = get_db()
     image = db.execute(
@@ -160,9 +148,7 @@ def image(id):
         ' WHERE id = ?',
         (id,)
     ).fetchone()['image']
-    
-    byte_im = image.tobytes()
-    return Response(byte_im, mimetype="image/png")
+    return Response(image, mimetype="image/png")
 
 
 

@@ -39,7 +39,7 @@ def create():
 
         if not name:
             error = 'Name is required'
-        if not image_file:
+        if image_file.filename == '':
             error = 'Image is required'
         
         if error is not None:
@@ -76,25 +76,33 @@ def update(id):
         name = request.form['name']
         description = request.form['description']
         image_file = request.files['image']
+        # print(image_file)
 
         error = None
 
         if not name:
             error = "Name is required."
-        if not image_file:
-            error = "Image is required."
 
         if error is not None:
             flash(error)
         else:
-            # serialize image for storage
-            image_serialized = image_file.read()
             db = get_db()
-            db.execute(
-                'UPDATE item SET name = ?, description = ?, image = ?'
-                ' WHERE id = ?',
-                (name, description, image_serialized, id)
-            )
+            if image_file.filename != '':
+                # print("updating image")
+                # serialize image for storage
+                image_serialized = image_file.read()
+                db.execute(
+                    'UPDATE item SET name = ?, description = ?, image = ?'
+                    ' WHERE id = ?',
+                    (name, description, image_serialized, id)
+                )
+            else:
+                # print("not updating image")
+                db.execute(
+                    'UPDATE item SET name = ?, description = ?'
+                    ' WHERE id = ?',
+                    (name, description, id)
+                )
             db.commit()
             return redirect(url_for('admin.index'))
 
