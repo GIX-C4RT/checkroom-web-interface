@@ -24,6 +24,9 @@ cd checkroom-web-interface # go to checkroom-web-interface directory
 python3 -m venv .venv # create virtual environment
 source .venv/bin/activate # activate the virtual environment
 pip install flask, numpy, opencv-contrib-python # install dependencies
+# set environment variables
+export FLASK_APP=checkroom
+export FLASK_ENV=development
 flask init-db # initialize the database
 ```
 
