@@ -8,6 +8,8 @@ import numpy as np
 from checkroom.auth import login_required
 from checkroom.db import get_db
 
+MAX_ITEMS = 4
+
 bp = Blueprint('checkroom', __name__)
 
 @bp.route('/')
@@ -40,38 +42,40 @@ def get_items(borrower=None):
 def checkout():
     error = None
     if request.method == 'POST':
-        id = request.form.get('id')
-        if id is None:
-            error = "id is required."
+        # print(request.form)
+        item_ids = request.form.getlist('item_ids')
+        # print(ids)
+        if len(item_ids) < 1:
+            error = "You must select at least one item."
+        elif len(item_ids) > MAX_ITEMS:
+            error = "You must not select more than 4 items."
         else:
             db = get_db()
-            current_borrower = db.execute(
-                'SELECT borrower'
-                ' FROM item'
-                ' WHERE id = ?',
-                (id,)
-            ).fetchone()
-            
-            if current_borrower['borrower'] is not None:
-                error = "That item is unavailable."
-            else: 
-                db.execute(
-                    'UPDATE item'
-                    ' SET borrower = ?'
-                    ' WHERE id = ?',
-                    (g.user['id'], id)
-                )
-                db.commit()
-
-                # display confirmation message
-                item_name = db.execute(
-                    'SELECT name'
+            item_names = []
+            for item_id in item_ids:
+                item_info = db.execute(
+                    'SELECT name, borrower'
                     ' FROM item'
                     ' WHERE id = ?',
-                    (id,)
+                    (item_id,)
                 ).fetchone()
-                success_message = "Successfully checked out " + item_name["name"] + ". " + \
-                    "Please wait for the robot to bring you your item."
+                item_names.append(item_info['name'])
+            
+                if item_info['borrower'] is not None:
+                    error = f"{item_info['name']} is unavailable."
+            if error is None:
+                for item_id in item_ids:
+                    db.execute(
+                        'UPDATE item'
+                        ' SET borrower = ?'
+                        ' WHERE id = ?',
+                        (g.user['id'], item_id)
+                    )
+                    db.commit()
+
+                # display confirmation message
+                success_message = f"Successfully checked out {item_names}. \
+                    Please wait for the robot to bring you your item(s)."
                 flash(success_message)
     if error is not None:
         flash(error)
@@ -84,38 +88,38 @@ def checkout():
 def checkin():
     error = None
     if request.method == 'POST':
-        id = request.form.get('id')
-        if id is None:
-            error = "id is required."
+        item_ids = request.form.getlist('item_ids')
+        if len(item_ids) < 1:
+            error = "You must select at least one item."
+        elif len(item_ids) > MAX_ITEMS:
+            error = "You must not select more than 4 items."
         else:
             db = get_db()
-            current_borrower = db.execute(
-                'SELECT borrower'
-                ' FROM item'
-                ' WHERE id = ?',
-                (id,)
-            ).fetchone()
-            
-            if current_borrower['borrower'] != g.user['id']:
-                error = "You cannot check in an item you have not checked out."
-            else:   
-                db.execute(
-                    'UPDATE item'
-                    ' SET borrower = NULL'
-                    ' WHERE id = ?',
-                    (id,)
-                )
-                db.commit()
-
-                # display confirmation message
-                item_name = db.execute(
-                    'SELECT name'
+            item_names = []
+            for item_id in item_ids:
+                item_info = db.execute(
+                    'SELECT name, borrower'
                     ' FROM item'
                     ' WHERE id = ?',
-                    (id,)
+                    (item_id,)
                 ).fetchone()
-                # print(item_name["name"])
-                flash("Successfully checked in " + item_name["name"] + ". Please wait for the robot to retrieve your item.")
+                
+                if item_info['borrower'] != g.user['id']:
+                    error = "You cannot check in an item you have not checked out."
+                item_names.append(item_info['name'])
+            if error is None:
+                for item_id in item_ids:   
+                    db.execute(
+                        'UPDATE item'
+                        ' SET borrower = NULL'
+                        ' WHERE id = ?',
+                        (item_id,)
+                    )
+                    db.commit()
+
+                # display confirmation message
+                flash(f"Successfully checked in {item_names}. \
+                    Please wait for the robot to retrieve your item.")
     if error is not None:
         flash(error)
     my_items = get_items(borrower=g.user["id"])

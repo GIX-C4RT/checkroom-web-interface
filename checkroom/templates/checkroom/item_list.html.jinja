@@ -2,20 +2,20 @@
 <table class="table is-bordered">
     <tr>
         <th>Image</th>
-        <th>ArUco Marker</th>
         <th>Name</th>
         <th>Description</th>
-        {# <th>Select</th> #}
+        {% if buttons %}
+        <th>Select</th>
+        {% endif %}
     </tr>
 {% for item in items %}
     <tr>
         <td><figure class="image is-128x128"><img alt="Image of {{ item['name'] }}" src="/image/{{ item['id'] }}"></figure></td>
-        <td><figure class="image is-128x128"><img alt="ArUco marker for item id {{ item['id'] }}" src="/aruco/{{ item['id'] }}"></figure></td>
         <td>{{ item["name"] }}</td>
         <td>{{ item["description"] }}</td>
         {% if buttons %}
         <td>
-            <input type="radio" name="id" value="{{ item['id'] }}" required>
+            <input type="checkbox" name="item_ids" value="{{ item['id'] }}">
         </td>
         {% endif %}
     </tr>
