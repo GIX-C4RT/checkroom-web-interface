@@ -33,6 +33,8 @@ flask init-db # initialize the database
 ### Runnning
 #### Ubuntu
 ```
+cd robotics/checkroom-web-interface
+source .venv/bin/activate # activate the virtual environment
 source run.bash # run the web app backend
 ```
 
